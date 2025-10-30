@@ -1,0 +1,13 @@
+#include <stdio.h>
+int main(){
+ int f[50]={0}, st,len,i,j;
+ printf("Enter start block & length: ");
+ scanf("%d %d",&st,&len);
+ if(f[st]==0){
+  for(i=st;i<st+len;i++){
+   if(f[i]==0){ f[i]=1; printf("Block %d allocated\n",i); }
+   else { printf("Block %d already used\n",i); break; }
+  }
+  if(i==st+len) printf("File allocated successfully\n");
+ } else printf("Starting block already allocated\n");
+}

@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+    int fd[2];
+    char msg[] = "Hello from parent", buf[50];
+
+    pipe(fd);              // create pipe
+    if (fork() == 0) {     // child
+        read(fd[0], buf, sizeof(buf));
+        printf("Child received: %s\n", buf);
+    } else {               // parent
+        write(fd[1], msg, sizeof(msg));
+    }
+    return 0;
+}

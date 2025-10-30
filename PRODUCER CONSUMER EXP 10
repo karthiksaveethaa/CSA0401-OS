@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <semaphore.h>
+#define N 5
+int buf[N], in=0, out=0;
+sem_t empty, full, mutex;
+
+void *prod() {
+ int item=1;
+ while(item<=5){
+  sem_wait(&empty); sem_wait(&mutex);
+  buf[in]=item; printf("Produced %d\n",item++);
+  in=(in+1)%N;
+  sem_post(&mutex); sem_post(&full);
+ }
+}
+void *cons() {
+ int item,i;
+ for(i=0;i<5;i++){
+  sem_wait(&full); sem_wait(&mutex);
+  item=buf[out]; printf("Consumed %d\n",item);
+  out=(out+1)%N;
+  sem_post(&mutex); sem_post(&empty);
+ }
+}
+int main(){
+ pthread_t p,c;
+ sem_init(&empty,0,N); sem_init(&full,0,0); sem_init(&mutex,0,1);
+ pthread_create(&p,0,prod,0); pthread_create(&c,0,cons,0);
+ pthread_join(p,0); pthread_join(c,0);
+}

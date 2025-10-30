@@ -1,0 +1,24 @@
+#include <stdio.h>
+int main(){
+ int n,f,p[20],fr[10],i,j,k,pos,max,count=0;
+ printf("Pages: "); scanf("%d",&n);
+ printf("Seq: "); for(i=0;i<n;i++) scanf("%d",&p[i]);
+ printf("Frames: "); scanf("%d",&f);
+ for(i=0;i<f;i++) fr[i]=-1;
+ for(i=0;i<n;i++){
+  int flag=0;
+  for(j=0;j<f;j++) if(fr[j]==p[i]) flag=1;
+  if(!flag){
+   if(i<f) fr[i]=p[i];
+   else{
+    int near[10];
+    for(j=0;j<f;j++){ near[j]=-1;
+     for(k=i+1;k<n;k++) if(fr[j]==p[k]){ near[j]=k; break; } }
+    pos=0; for(j=1;j<f;j++) if(near[j]==-1||(near[j]>near[pos]&&near[pos]!=-1)) pos=j;
+    fr[pos]=p[i]; count++;
+   }
+  }
+  printf("%d: ",p[i]); for(k=0;k<f;k++) printf("%d ",fr[k]); printf("\n");
+ }
+ printf("Faults=%d\n",count);
+}
